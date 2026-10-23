@@ -1,173 +1,114 @@
-# Gestor de Tarefas (To-Do App)
+# To-Do App — Gestor de Tarefas
 
-Aplicação web para gestão de tarefas com Frontend em React e Backend em PHP.
+Aplicação web de gestão de tarefas com frontend em React 18 e backend em PHP 8+ com API REST. Base de dados MySQL. Comunicação via JSON sobre HTTP com suporte a CORS.
 
-## 🚀 Tecnologias
+## Especificações técnicas
 
-- **Frontend:** React 18 (componentes funcionais e Hooks)
-- **Backend:** PHP 8+ com API REST
-- **Base de Dados:** MySQL
-- **Comunicação:** JSON via REST API
+| Item | Valor |
+|------|-------|
+| Frontend | React 18.2.0, React DOM, React Scripts 5.0.1 (Create React App) |
+| Backend | PHP 8+, PDO (MySQL), API REST |
+| Base de dados | MySQL / MariaDB |
+| Comunicação | JSON, fetch API, CORS habilitado |
+| Build tool | npm / react-scripts |
+| Tabela BD | `tasks` (id, title, description, completed, created_at) |
 
-## 📁 Estrutura do Projeto
+## Estrutura do repositório
 
 ```
 todo/
 ├── backend/
+│   ├── .htaccess          # Regras de routing Apache
 │   ├── config/
-│   │   └── db.php          # Configuração da ligação à BD
-│   ├── api/
-│   │   └── tasks.php       # Endpoints da API REST
-│   ├── .htaccess           # Regras de routing
-│   └── todo_app.sql        # Script de criação da BD
-│
-└── frontend/
-    ├── public/
-    │   └── index.html
-    ├── src/
-    │   ├── components/
-    │   │   ├── TaskForm.js    # Formulário de tarefas
-    │   │   ├── TaskList.js    # Lista de tarefas
-    │   │   └── TaskItem.js     # Item individual
-    │   ├── App.js              # Componente principal
-    │   ├── App.css             # Estilos
-    │   └── index.js           # Entry point
-    └── package.json
+│   │   └── db.php         # Ligação PDO a MySQL + headers CORS
+│   └── api/
+│       └── tasks.php      # Endpoints REST de tarefas
+├── frontend/
+│   ├── package.json       # Dependências React (react, react-dom, react-scripts)
+│   ├── package-lock.json
+│   ├── public/
+│   │   └── index.html
+│   └── src/
+│       ├── index.js       # Ponto de entrada React
+│       ├── App.js         # Componente principal
+│       ├── App.css        # Estilos da aplicação
+│       └── components/
+│           ├── TaskForm.js
+│           ├── TaskList.js
+│           └── TaskItem.js
+├── todo_app.sql           # Script de criação da base de dados e tabela
+└── README.md
 ```
 
----
+## Endpoints da API (`backend/api/tasks.php`)
 
-## 🏃 Como Iniciar (Sem Mexer em Código)
+Base path: `/api/tasks`
 
-### Passo 1: Iniciar o XAMPP (Base de Dados + Apache)
+| Método | Endpoint | Descrição | Body de request |
+|--------|----------|-----------|-----------------|
+| GET | `/api/tasks` | Listar todas as tarefas (ordenadas por `created_at` DESC) | — |
+| GET | `/api/tasks/{id}` | Obter tarefa específica | — |
+| POST | `/api/tasks` | Criar nova tarefa | `{"title": string, "description": string\|null}` |
+| PUT | `/api/tasks/{id}` | Atualizar tarefa | `{"title": string, "description": string\|null, "completed": bool}` |
+| PATCH | `/api/tasks/{id}/complete` | Marcar como concluída/pendente | `{"completed": bool}` |
+| DELETE | `/api/tasks/{id}` | Apagar tarefa | — |
 
-1. Abra o **XAMPP Control Panel**
-2. Inicie os módulos:
-   - **Apache** (servidor web)
-   - **MySQL** (base de dados)
-3. Clique em **Admin** ao lado do MySQL para abrir o phpMyAdmin
+## Variáveis de ambiente
 
-### Passo 2: Criar a Base de Dados
+Crie `backend/.env` a partir de `backend/.env.example` (não versionado):
 
-1. No phpMyAdmin (http://localhost/phpmyadmin):
-   - Clique em **Novo** no menu lateral
-   - Nome da base de dados: `todo_app`
-   - Selecione **utf8mb4_unicode_ci** como collation
-   - Clique em **Criar**
+| Variável | Descrição | Padrão |
+|----------|-----------|--------|
+| `DB_HOST` | Host do MySQL | `localhost` |
+| `DB_NAME` | Nome da base de dados | `todo_app` |
+| `DB_USER` | Utilizador MySQL | `root` |
+| `DB_PASS` | Password MySQL | vazio |
 
-2. Clique na base de dados `todo_app` criada
-3. Clique no separador **Importar**
-4. Clique em **Escolher ficheiro** e selecione: `todo_app.sql`
-5. Role até ao fundo e clique em **Executar**
+Exemplo:
 
-> ✅ A tabela `tasks` será criada automaticamente!
+```
+DB_HOST=localhost
+DB_NAME=todo_app
+DB_USER=root
+DB_PASS=
+```
 
-### Passo 3: Iniciar o Frontend (React)
+## Instalação
 
-Abra um terminal na pasta do projeto e execute:
+### 1. Base de dados
 
-```bash
-cd frontend
+1. Inicie o MySQL (XAMPP/Laragon ou equivalente).
+2. Crie a base de dados `todo_app` com collation `utf8mb4_unicode_ci`.
+3. Importe `todo_app.sql` para criar a tabela `tasks`.
+
+### 2. Backend (PHP)
+
+1. Copie a pasta `backend` para um diretório servido por Apache com PHP 8+.
+2. Crie `backend/.env` com as credenciais da base de dados.
+3. Verifique se a extensão `pdo_mysql` está ativada no PHP.
+4. O ficheiro `backend/.htaccess` trata o routing para `api/tasks.php`.
+
+### 3. Frontend (React)
+
+1. Na pasta `frontend`, execute:
+
+```
 npm install
 npm start
 ```
 
-> ✅ A aplicação abrirá automaticamente em http://localhost:3000
+2. A aplicação estará disponível em `http://localhost:3000`.
 
-### Passo 4: Verificar se Tudo Funciona
+### 4. CORS
 
-1. Certifique-se que o **Apache** e **MySQL** estão a correr no XAMPP
-2. Abra http://localhost:3000 no navegador
-3. Crie uma tarefa de teste - se aparecer na lista, está tudo a funcionar!
+O backend envia `Access-Control-Allow-Origin: *` e suporta pré-voo `OPTIONS`. Ajuste a origem em `backend/config/db.php` se necessário para produção.
 
----
+## Notas de segurança
 
-## 📡 Endpoints da API
+- O ficheiro `.env` está no `.gitignore`; não insira credenciais reais no repositório.
+- As consultas SQL utilizam prepared statements (PDO) para prevenir injeção SQL.
+- Em produção, restrinja `Access-Control-Allow-Origin` ao domínio do frontend.
 
-| Método | Endpoint | Descrição |
-|--------|----------|-----------|
-| GET | `/api/tasks` | Listar todas as tarefas |
-| POST | `/api/tasks` | Criar nova tarefa |
-| GET | `/api/tasks/{id}` | Obter tarefa específica |
-| PUT | `/api/tasks/{id}` | Atualizar tarefa |
-| PATCH | `/api/tasks/{id}/complete` | Marcar como concluída |
-| DELETE | `/api/tasks/{id}` | Apagar tarefa |
+## Licença
 
-### Exemplos de Requests/Responses
-
-**GET /api/tasks**
-```json
-[
-  {
-    "id": 1,
-    "title": "Aprender React",
-    "description": "Estudar hooks e componentes",
-    "created_at": "2024-01-01 12:00:00",
-    "completed": 1
-  }
-]
-```
-
-**POST /api/tasks**
-```json
-// Request
-{
-  "title": "Nova tarefa",
-  "description": "Descrição opcional"
-}
-
-// Response
-{
-  "id": 2,
-  "title": "Nova tarefa",
-  "description": "Descrição opcional",
-  "created_at": "2024-01-02 14:30:00",
-  "completed": 0
-}
-```
-
-**PUT /api/tasks/1**
-```json
-// Request
-{
-  "title": "Tarefa atualizada",
-  "description": "Nova descrição",
-  "completed": true
-}
-
-// Response
-{
-  "id": 1,
-  "title": "Tarefa atualizada",
-  "description": "Nova descrição",
-  "created_at": "2024-01-01 12:00:00",
-  "completed": 1
-}
-```
-
-## 🎨 Funcionalidades
-
-- ✅ Criar tarefa (título obrigatório, descrição opcional)
-- ✅ Listar todas as tarefas
-- ✅ Editar tarefa (título, descrição, estado)
-- ✅ Marcar tarefa como concluída/pendente
-- ✅ Apagar tarefa
-- ✅ Feedback visual de tarefas concluídas (texto riscado)
-- ✅ Mensagens de erro/sucesso
-- ✅ Design responsivo
-
-## 📝 Notas
-
-- O frontend comunica diretamente com a API via fetch
-- CORS está configurado no backend para permitir pedidos do React (localhost:3000)
-- As datas são armazenadas no formato DATETIME do MySQL
-
-## 🔨 Possíveis Problemas
-
-1. **Erro CORS:** Verifique se o header `Access-Control-Allow-Origin` está correto no `db.php`
-2. **Erro de conexão:** Verifique as credenciais MySQL em `config/db.php`
-3. **API não encontrada:** Verifique se o .htaccess está a funcionar corretamente
-
----
-
-Desenvolvido com ❤️ para o desafio To-Do App
+Projeto académico / pessoal.
