@@ -4,10 +4,10 @@
  * Gestor de Tarefas - To-Do App
  */
 
-$db_host = 'localhost';
-$db_name = 'todo_app';
-$db_user = 'root';
-$db_pass = '';
+$db_host = getenv('DB_HOST') ?: 'localhost';
+$db_name = getenv('DB_NAME') ?: 'todo_app';
+$db_user = getenv('DB_USER') ?: 'root';
+$db_pass = getenv('DB_PASS') ?: '';
 
 try {
     // Criar conexão PDO com charset utf8mb4 para suporte a caracteres especiais
