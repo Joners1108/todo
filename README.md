@@ -111,4 +111,8 @@ O backend envia `Access-Control-Allow-Origin: *` e suporta pré-voo `OPTIONS`. A
 
 ## Licença
 
-Projeto académico / pessoal.
+© 2026 João Pereira — https://github.com/Joners1108
+
+Este projeto está disponível para uso pessoal e académico. Para uso comercial ou redistribuição, contacte o autor através do GitHub.
+
+O código é fornecido "tal como está", sem garantias de qualquer tipo.
