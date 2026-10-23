@@ -1,0 +1,14 @@
+# Rewrites URLs for the API
+# Gestor de Tarefas - To-Do App
+
+RewriteEngine On
+RewriteBase /todo/backend/
+
+# Redirect /api/tasks to /api/tasks.php
+RewriteRule ^api/tasks$ api/tasks.php [L]
+
+# Redirect /api/tasks/{id} to /api/tasks.php
+RewriteRule ^api/tasks/([0-9]+)$ api/tasks.php [L]
+
+# Redirect /api/tasks/{id}/complete to /api/tasks.php
+RewriteRule ^api/tasks/([0-9]+)/complete$ api/tasks.php [L]
